@@ -8,7 +8,7 @@
 
 # Step 2
 # Run the Docker Hub container with kubernetes
-  minikube kubectl create deploy predictions-app --image=ninorainman/tsudevops:projectML
+  kubectl create deploy predictions-app --image=ninorainman/tsudevops:projectML
 # Step 3:
 # List kubernetes pods
   minikube kubectl get deploy,rs,svc,pods
