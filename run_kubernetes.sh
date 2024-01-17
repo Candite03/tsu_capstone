@@ -14,4 +14,4 @@
   kubectl get pods
 # Step 4:
 # Forward the container port to a host
-  kubectl port-forward deployment/predictions-app 80:80
+  kubectl port-forward deployment/predictions-app 8080:80
