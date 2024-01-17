@@ -8,7 +8,7 @@
 
 # Step 2
 # Run the Docker Hub container with kubernetes
-  kubectl create deploy predictions-app --image=ninorainman/tsudevops:projectML --http-port=80
+  kubectl create deploy predictions-app --image=ninorainman/tsudevops:projectML --port=80
 # Step 3:
 # List kubernetes pods
   kubectl get pods
