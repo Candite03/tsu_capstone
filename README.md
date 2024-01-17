@@ -1,4 +1,5 @@
-<include a CircleCI status badge, here>to do
+![image](https://github.com/Candite03/tsu_project-ml-microservices-k8s/assets/146722646/4e48e2aa-adc9-472d-b60e-548cc2f5c46b)
+
 
 ## Project Overview
 
