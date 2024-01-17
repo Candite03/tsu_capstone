@@ -14,4 +14,4 @@
   kubectl get pods
 # Step 4:
 # Forward the container port to a host
-# minikube kubectl port-forward pod/predictions-app --address 0.0.0.0 80:80
+  kubectl expose deployment predictions-app --type=LoadBalancer --port=80
