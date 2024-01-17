@@ -36,6 +36,7 @@ python3 -m virtualenv --python=<path-to-Python3.7> .devops
 source .devops/bin/activate
 ```
 * Run `make install` to install the necessary dependencies
+* requirements.txt include all dependencies that will be installed with the above command
 
 ### Running `app.py`
 
@@ -43,9 +44,16 @@ source .devops/bin/activate
 2. Run in Docker:  `./run_docker.sh`
 3. Run in Kubernetes:  `./run_kubernetes.sh`
 
+### Testing locally
+* run script `make_prediction.sh`
+
 ### Kubernetes Steps
 
 * Setup and Configure Docker locally
 * Setup and Configure Kubernetes locally
 * Create Flask app in Container
 * Run via kubectl
+
+### Building Image
+* Dockerfile will be used to build the container image
+* Run a script named 'upload_docker.sh' to build your image and upload to docker hub
