@@ -1,1 +1,14 @@
-<paste log output from Kubernetes-mediated prediction, here>
+ ./run_kubernetes.sh
+error: failed to create deployment: deployments.apps "predictions-app" already exists
+NAME                              READY   STATUS    RESTARTS   AGE
+predictions-app-6849f79b5-tjgfl   1/1     Running   0          8m53s
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+
+Port: 8080
+{
+  "prediction": [
+    20.35373177134412
+  ]
+}
+
