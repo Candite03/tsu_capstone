@@ -1,6 +1,5 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main)
 
-
 ## Project Overview
 
 In this project, I am deploying a flask application which runs inside a Docker container and deployed to Kubernetes cluster.
