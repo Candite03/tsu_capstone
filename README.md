@@ -1,4 +1,4 @@
-![image](https://github.com/Candite03/tsu_project-ml-microservices-k8s/assets/146722646/4e48e2aa-adc9-472d-b60e-548cc2f5c46b)
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main)
 
 
 ## Project Overview
