@@ -1,5 +1,4 @@
-[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main.svg?style=svg)]
-(https://dl.circleci.com/status-badge/redirect/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main)
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/UQxu84CmqkGr2krXN1fa5J/8XP6oYVYiP51KSHcpteJJ/tree/main)
 
 
 ## Project Overview
