@@ -48,7 +48,7 @@ jobs:
       - checkout
       - run:
           name: Create K8s Stack
-          command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_infra.yml  --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5}  --region us-east-1"
+          command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_infra.yml  --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5} --parameters ParameterKey=EnvironmentName,ParameterValue=K8s-Env --region us-east-1"
 
 workflows:
   eks-cluster-deploy:
