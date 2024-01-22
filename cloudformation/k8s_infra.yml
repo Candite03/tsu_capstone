@@ -2,10 +2,7 @@ Description: >
     Tsundzukani Mokgalaka.
     This creates an EKS cluster on the created VPC.
 
-Parameters:
-  EnvironmentName:
-    Description: An environment name that will be prefixed to resource names
-    Type: String
+
 
 Resources:
     EKSClusterRole:
