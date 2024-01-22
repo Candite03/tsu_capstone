@@ -47,10 +47,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Create Cloudformation Stack
+          name: Create K8s Stack
           command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_infra.yml  --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5}  --region us-east-1"
 
 workflows:
-  eks cluster deploy:
+  eks-cluster-deploy:
     jobs:
        - create_infrastructure  
