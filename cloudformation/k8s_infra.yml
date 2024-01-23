@@ -45,7 +45,6 @@ Resources:
       Type: AWS::EKS::Cluster
       Properties:
         Name: Capstone_Cluster
-        Version: "1.20"
         RoleArn: !GetAtt EKSClusterRole.Arn
         ResourcesVpcConfig:
           SecurityGroupIds:

@@ -52,7 +52,7 @@ jobs:
           command: |
              chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh EKS-VPC-${CIRCLE_WORKFLOW_ID:0:5} ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
-             sleep 200
+             sleep 120
              echo "VPC is now ready."
 
   create_cluster:
