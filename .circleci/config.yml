@@ -40,17 +40,29 @@ jobs:
           name: run lint
           command: |
             . venv/bin/activate
-            make lint 
-  create_infrastructure:
+            make lint
+  
+  create_vpc:
     docker:
       - image: amazon/aws-cli
     steps:
       - checkout
       - run:
-          name: Create K8s Stack
-          command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_infra.yml  --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --capabilities CAPABILITY_NAMED_IAM"
+          name: Create K8s VPC
+          command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_vpc.yml  --parameters file://cloudformation/vpc-parameters.json --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --capabilities CAPABILITY_NAMED_IAM"
+
+  create_cluster:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create K8s Cluster
+          command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_infra.yml  --parameters file://cloudformation/infra-parameters.json --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --capabilities CAPABILITY_NAMED_IAM"
 
 workflows:
   eks-cluster-deploy:
     jobs:
-       - create_infrastructure  
+       - create_vpc
+       - create_cluster:
+          requires: [create_vpc]
