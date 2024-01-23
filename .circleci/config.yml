@@ -51,7 +51,7 @@ jobs:
           name: Create K8s VPC
           command: |
              chmod +x ./cloudformation/scripts/create.sh
-             ./cloudformation/scripts/create.sh EKS_VPC-${CIRCLE_WORKFLOW_ID:0:5} k8s_vpc.yml vpc-parameters.json
+             ./cloudformation/scripts/create.sh EKS_VPC-${CIRCLE_WORKFLOW_ID:0:5} ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
 
   create_cluster:
     docker:
@@ -62,7 +62,7 @@ jobs:
           name: Create K8s Cluster
           command: |
              chmod +x ./cloudformation/scripts/create.sh
-             ./cloudformation/scripts/create.sh EKS_Cluster-${CIRCLE_WORKFLOW_ID:0:5} k8s_infra.yml infra-parameters.json
+             ./cloudformation/scripts/create.sh EKS_Cluster-${CIRCLE_WORKFLOW_ID:0:5} ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
 
 workflows:
   eks-cluster-deploy:
