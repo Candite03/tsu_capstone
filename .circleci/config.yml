@@ -49,7 +49,7 @@ jobs:
       - checkout
       - run:
           name: Create K8s VPC
-          command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_vpc.yml  --parameters file://cloudformation/vpc-parameters.json --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --capabilities CAPABILITY_NAMED_IAM"
+          command: ".~/project/cloudformation/scripts/create.sh EKS_VPC-${CIRCLE_WORKFLOW_ID:0:5} k8s_vpc.yml vpc-parameters.json"
 
   create_cluster:
     docker:
@@ -58,7 +58,7 @@ jobs:
       - checkout
       - run:
           name: Create K8s Cluster
-          command: "aws cloudformation deploy  --template-file ./cloudformation/k8s_infra.yml  --parameters file://cloudformation/infra-parameters.json --stack-name K8sStack-${CIRCLE_WORKFLOW_ID:0:5} --region us-east-1 --capabilities CAPABILITY_NAMED_IAM"
+          command: ".~/project/cloudformation/scripts/create.sh EKS_Cluster-${CIRCLE_WORKFLOW_ID:0:5} k8s_infra.yml infra-parameters.json"
 
 workflows:
   eks-cluster-deploy:
