@@ -26,6 +26,7 @@ Resources:
 
     EKSClusterSecGroup:
       Type: AWS::EC2::SecurityGroup
+      DependsOn: !Sub "${EnvironmentName}-VPCID"
       Properties:
         GroupDescription: Allow http to our hosts
         VpcId:
