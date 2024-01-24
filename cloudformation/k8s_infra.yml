@@ -24,6 +24,24 @@ Resources:
           ManagedPolicyArns:
             - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
 
+    EKSNodeGroupRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: EKSNodeGroupRole
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - ec2.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+          - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+
     EKSClusterSecGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
@@ -63,3 +81,20 @@ Resources:
         Tags:
           - Key: "Name"
             Value: "tsu_EKSCluster"
+
+    EKSNodeGroup:
+      Type: AWS::EKS::Nodegroup
+      Properties:
+        ClusterName: !Ref EKSCluster
+        NodegroupName: Capstone_NodeGroup
+        NodeRole: !GetAtt EKSNodeGroupRole.Arn
+        Subnets:
+          - Fn::ImportValue: !Sub ${EnvironmentName}-PUB1-SN
+          - Fn::ImportValue: !Sub ${EnvironmentName}-PUB2-SN
+        ScalingConfig:
+          DesiredSize: 2
+          MinSize: 1
+          MaxSize: 5
+        Tags:
+          - Key: "Name"
+            Value: "tsu_EKSNodeGroup"
