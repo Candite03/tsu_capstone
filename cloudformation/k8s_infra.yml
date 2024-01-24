@@ -23,6 +23,8 @@ Resources:
                   - sts:AssumeRole
           ManagedPolicyArns:
             - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+            - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+            - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
 
     EKSNodeGroupRole:
       Type: AWS::IAM::Role
