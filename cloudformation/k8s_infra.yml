@@ -96,5 +96,4 @@ Resources:
           MinSize: 1
           MaxSize: 5
         Tags:
-          - Key: "Name"
-            Value: "tsu_EKSNodeGroup"
+          "Name": "tsu_EKSNodeGroup"
