@@ -82,7 +82,7 @@ jobs:
       - run:
           name: Deploy runner instance
           command: |
-            aws cloudformation create-stack --stack-name BastionHost --template-body ./cloudformation/bastion_host.json --region=us-east-1
+            aws cloudformation create-stack --stack-name BastionHost --template-body cloudformation/bastion_host.json --region=us-east-1
             sleep 40
   
   get_ip:
