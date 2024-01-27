@@ -54,6 +54,12 @@ jobs:
           command: |
             docker build --tag=$DOCKER_IMAGE_NAME .
             docker image ls
+      - run: 
+          name: Push docker image to DockerHub
+          command: |
+            docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
+            docker tag $DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME:capstone
+            docker push $DOCKER_IMAGE_NAME:capstone
   
   create_vpc:
     docker:
