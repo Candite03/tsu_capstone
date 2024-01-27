@@ -160,5 +160,5 @@ workflows:
              requires: [get_ip, deploy_bastion_host]
         #- create_cluster:
         #    requires: [create_vpc]
-        - deploy_app
+        #- deploy_app
         #    requires: [create_cluster]

@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: '2010-09-09'
 Description: Tsundzukani Mokgalaka. EC2 instance provision to be used for CircleCI runner.
 
 Parameters:
@@ -10,17 +10,16 @@ Resources:
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     Properties:
-      SecurityGroups:
+      SecurityGroupIds:
         - !Ref InstanceSecurityGroup
       KeyName: tsuKey
       ImageId: !Ref LatestAmiId
       InstanceType: t2.micro
       SubnetId: 
-          - Fn::ImportValue: !Sub ${EnvironmentName}-PUB1-SN
+        Fn::ImportValue: !Sub '${EnvironmentName}-PUB1-SN'
       Tags:
-         Key: Name
-         Value: BastionHost
-
+        - Key: Name
+          Value: BastionHost
 
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
