@@ -91,6 +91,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: yum install -y jq
+      - run:
           name: Check Cluster Availability
           command: |
              chmod +x ./cluster_availability.sh
@@ -100,11 +103,11 @@ jobs:
 workflows:
   eks-cluster-deploy:
     jobs:
-        - build
-        - build-docker:
-            requires: [build]
-        - create_vpc
-        - create_cluster:
-            requires: [create_vpc]
-        - deploy_app:
-            requires: [create_cluster]
+        #- build
+        #- build-docker:
+        #    requires: [build]
+        #- create_vpc
+        #- create_cluster:
+        #    requires: [create_vpc]
+        - deploy_app
+        #    requires: [create_cluster]
