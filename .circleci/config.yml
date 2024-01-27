@@ -70,7 +70,7 @@ jobs:
           name: Create K8s VPC
           command: |
              chmod +x ./cloudformation/scripts/create.sh
-             ./cloudformation/scripts/create.sh EKS-VPC-${CIRCLE_WORKFLOW_ID:0:5} ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
+             ./cloudformation/scripts/create.sh Capstone-EKS-VPC ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
              sleep 300
              echo "VPC is now ready."
 
@@ -83,7 +83,19 @@ jobs:
           name: Create K8s Cluster
           command: |
              chmod +x ./cloudformation/scripts/create.sh
-             ./cloudformation/scripts/create.sh EKS-Cluster-${CIRCLE_WORKFLOW_ID:0:5} ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
+             ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
+
+  deploy_app:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Check Cluster Availability
+          command: |
+             chmod +x ./cluster_availability.sh
+             ./cluster_availability.sh
+          no_output_timeout: 30m
 
 workflows:
   eks-cluster-deploy:
@@ -91,6 +103,8 @@ workflows:
         - build
         - build-docker:
             requires: [build]
-       #- create_vpc
-       #- create_cluster:
-       #   requires: [create_vpc]
+        - create_vpc
+        - create_cluster:
+            requires: [create_vpc]
+        - deploy_app:
+            requires: [create_cluster]
