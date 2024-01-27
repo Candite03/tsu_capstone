@@ -133,8 +133,6 @@ jobs:
   deploy_app:
     docker:
       - image: amazon/aws-cli
-    requires:
-      - self-hosted
     steps:
       - checkout
       - run:
