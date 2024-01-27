@@ -16,8 +16,7 @@ Resources:
       KeyName: tsuKey
       ImageId: 'ami-0a3c3a20c09d6f377' # you may need to find out what instance types are available in your region - use https://cloud-images.ubuntu.com/locator/ec2/
       InstanceType: t2.micro
-      SubnetId: 
-        Fn::ImportValue: !Sub '${EnvironmentName}-PUB1-SN'
+      
 
 
   InstanceSecurityGroup:
