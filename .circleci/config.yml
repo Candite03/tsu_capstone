@@ -41,6 +41,17 @@ jobs:
           command: |
             . venv/bin/activate
             make lint
+
+  build-docker:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run:
+          name: Build docker image
+          command: |
+            docker build --tag=$DOCKER_IMAGE_NAME .
+            docker image ls
   
   create_vpc:
     docker:
