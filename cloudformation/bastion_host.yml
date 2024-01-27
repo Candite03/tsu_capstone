@@ -5,6 +5,10 @@ Parameters:
   LatestAmiId:
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
     Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-minimal-kernel-default-x86_64'
+  
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
 
 Resources:
     EC2Instance:
