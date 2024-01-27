@@ -69,6 +69,7 @@ jobs:
 workflows:
   eks-cluster-deploy:
     jobs:
-       - create_vpc
-       - create_cluster:
-          requires: [create_vpc]
+        - build
+       #- create_vpc
+       #- create_cluster:
+       #   requires: [create_vpc]
