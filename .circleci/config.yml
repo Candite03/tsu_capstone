@@ -81,6 +81,8 @@ workflows:
   eks-cluster-deploy:
     jobs:
         - build
+        - build-docker:
+            requires: [build]
        #- create_vpc
        #- create_cluster:
        #   requires: [create_vpc]
