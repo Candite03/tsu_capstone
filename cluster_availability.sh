@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cluster_name="Capstone-EKS-Cluster"
+cluster_name="Capstone_Cluster"
 region="us-east-1"
 
 while true; do

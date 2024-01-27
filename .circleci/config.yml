@@ -74,6 +74,51 @@ jobs:
              sleep 300
              echo "VPC is now ready."
 
+  deploy_bastion_host:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Deploy runner instance
+          command: |
+            aws cloudformation create-stack --stack-name BastionHost --template-body ./cloudformation/bastion_host.yml --region=us-east-1
+            sleep 40
+  
+  get_ip:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Get Instance IP
+          command: | 
+            INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=BastionHost" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
+            echo "$INSTANCE_IP" >> ansible/inventory.txt
+
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/ansible/inventory.txt
+
+  configure_bastion:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          # You can get this ID in the section where you registered the SSH Key
+            fingerprints: ["SHA256:Pkkhobdg+eV6wayd6ngCI+ndG3VxhKd6l/PTi2To28A"]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Configure BastionHost
+          command: |
+            cd ~/project/ansible
+            ansible-playbook -i inventory.txt configure_runner.yml
+          
+
   create_cluster:
     docker:
       - image: amazon/aws-cli
@@ -88,6 +133,8 @@ jobs:
   deploy_app:
     docker:
       - image: amazon/aws-cli
+    requires:
+      - self-hosted
     steps:
       - checkout
       - run:
@@ -106,7 +153,13 @@ workflows:
         #- build
         #- build-docker:
         #    requires: [build]
-        #- create_vpc
+        - create_vpc
+        - deploy_bastion_host:
+             requires: [create_vpc]
+        - get_ip:
+             requires: [deploy_bastion_host]
+        - configure_bastion:
+             requires: [get_ip, deploy_bastion_host]
         #- create_cluster:
         #    requires: [create_vpc]
         - deploy_app
