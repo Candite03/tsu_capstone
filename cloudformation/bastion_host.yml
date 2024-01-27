@@ -1,12 +1,6 @@
 # Exercise - Rollback
 AWSTemplateFormatVersion: 2010-09-09
 Description: Tsundzukani Mokgalaka. EC2 instance provision 
-
-Parameters:
-  EnvironmentName:
-    Description: An environment name that will be prefixed to resource names
-    Type: String
-
 Resources:
   EC2Instance:
     Type: 'AWS::EC2::Instance'
@@ -14,11 +8,8 @@ Resources:
       SecurityGroups:
         - !Ref InstanceSecurityGroup
       KeyName: tsuKey
-      ImageId: 'ami-0a3c3a20c09d6f377' # you may need to find out what instance types are available in your region - use https://cloud-images.ubuntu.com/locator/ec2/
-      InstanceType: t2.micro
-      
-
-
+      ImageId: 'ami-09e67e426f25ce0d7' # you may need to find out what instance types are available in your region - use https://cloud-images.ubuntu.com/locator/ec2/
+      InstanceType: t3.micro
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
