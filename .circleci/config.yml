@@ -172,12 +172,12 @@ workflows:
         #- build-docker:
         #    requires: [build]
         #- create_vpc
-        - deploy_bastion_host
+        #- deploy_bastion_host
         #     requires: [create_vpc]
-        - get_ip:
-             requires: [deploy_bastion_host]
+        - get_ip
+        #     requires: [deploy_bastion_host]
         - configure_bastion:
-             requires: [deploy_bastion_host, get_ip]
+             requires: [get_ip]
         #- create_cluster:
         #    requires: [create_vpc]
         - deploy_app:
