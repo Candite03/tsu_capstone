@@ -153,6 +153,7 @@ jobs:
           command: |
              chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
+      - aws-cli/install
       - aws-eks/get-kubeconfig:
           cluster-name: Capstone-EKS-Cluster
       - persist_to_workspace:
