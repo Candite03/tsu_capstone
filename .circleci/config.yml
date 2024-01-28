@@ -149,7 +149,7 @@ jobs:
              chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
 
-  deploy_app:
+  cluster_availability:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -163,6 +163,17 @@ jobs:
              chmod +x ./cluster_availability.sh
              ./cluster_availability.sh
           no_output_timeout: 30m
+    
+  deploy_app:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Deploy App
+          command: |
+             cd ./app_deploy
+             kubectl apply -f capstone.yml
 
 workflows:
   eks-cluster-deploy:
@@ -173,5 +184,7 @@ workflows:
         - create_vpc
         - create_cluster:
             requires: [create_vpc]
-        - deploy_app:
+        - cluster_availability:
             requires: [create_cluster]
+        - deploy_app:
+            requires: [cluster_availability, create_cluster]
