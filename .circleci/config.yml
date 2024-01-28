@@ -108,7 +108,7 @@ jobs:
           name: Get Instance IP
           command: | 
             INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=BastionHost" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
-            echo "$INSTANCE_IP" >> ansible/inventory.txt
+            echo -e "$INSTANCE_IP" >> ansible/inventory.txt
 
       - persist_to_workspace:
           root: ~/
