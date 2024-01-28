@@ -5,13 +5,13 @@ Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
-    
+
 Resources:    
     EC2Instance:
       Type: 'AWS::EC2::Instance'
       Properties:
           SecurityGroupIds:
-            - !Ref InstanceSecurityGroup
+            - !GetAtt InstanceSecurityGroup.GroupId
           KeyName: tsuKey
           ImageId: ami-0a3c3a20c09d6f377  
           InstanceType: t2.micro
