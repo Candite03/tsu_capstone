@@ -123,7 +123,6 @@ jobs:
       - add_ssh_keys:
           # You can get this ID in the section where you registered the SSH Key
             fingerprints: ["SHA256:01ODfG5OsCcf7ztYjM3cXz4WYkGBXeEM1g3j4P6Ti6k"]
-      # attach workspace
       - attach_workspace:
           at: ~/
       - run:
