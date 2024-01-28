@@ -1,14 +1,10 @@
 - name: "Install CircleCI Runner"
   become: true  
   shell:  |
-      curl -o /tmp/circleci-runner-install.sh https://raw.githubusercontent.com/CircleCI-Public/circleci-runner/master/install-runner.sh
-      bash /tmp/circleci-runner-install.sh 2c9280985136dfa1301e7dbf22b45daaad0fbc83 Capstone_Project
-
-- name: "add runner configuration."
-  become: true
-  copy:
-    src: config.yml
-    dest: /etc/circleci/
-- name: "Start Runner"
-  become: true
-  shell: circleci-runner service start
+      yum install coreutils
+      curl -s https://packagecloud.io/install/repositories/circleci/runner/script.rpm.sh?any=true | sudo bash
+      sudo yum install circleci-runner -y
+      export RUNNER_AUTH_TOKEN="d015ee0cadf1ca0acf49e2b7b4796dddf43608b514957943182eb8dd40776e7d4d89834e421edb8d"
+      sudo sed -i "s/<< d015ee0cadf1ca0acf49e2b7b4796dddf43608b514957943182eb8dd40776e7d4d89834e421edb8d >>/$RUNNER_AUTH_TOKEN/g" /etc/circleci-runner/circleci-runner-config.yaml
+      sudo systemctl enable circleci-runner && sudo systemctl start circleci-runner
+      sudo systemctl status circleci-runner

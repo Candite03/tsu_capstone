@@ -3,6 +3,13 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
+
+executors:
+  self-hosted-runner-executor:
+    docker:
+      - image: amazon/aws-cli  # Specify the Docker image for this executor if needed
+    resource_class: small
+
 jobs:
   build:
     docker:
@@ -109,7 +116,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           # You can get this ID in the section where you registered the SSH Key
-            fingerprints: ["SHA256:Pkkhobdg+eV6wayd6ngCI+ndG3VxhKd6l/PTi2To28A"]
+            fingerprints: ["SHA256:01ODfG5OsCcf7ztYjM3cXz4WYkGBXeEM1g3j4P6Ti6k"]
       # attach workspace
       - attach_workspace:
           at: ~/
@@ -132,8 +139,7 @@ jobs:
              ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
 
   deploy_app:
-    docker:
-      - image: amazon/aws-cli
+    machine: true
     steps:
       - checkout
       - run:
@@ -142,6 +148,7 @@ jobs:
       - run:
           name: Check Cluster Availability
           command: |
+             echo "Hi I'm on Runners!"
              chmod +x ./cluster_availability.sh
              ./cluster_availability.sh
           no_output_timeout: 30m
@@ -152,14 +159,14 @@ workflows:
         #- build
         #- build-docker:
         #    requires: [build]
-        #- create_vpc
-        - deploy_bastion_host
-        #     requires: [create_vpc]
+        - create_vpc
+        - deploy_bastion_host:
+             requires: [create_vpc]
         - get_ip:
              requires: [deploy_bastion_host]
         - configure_bastion:
              requires: [deploy_bastion_host, get_ip]
         #- create_cluster:
         #    requires: [create_vpc]
-        #- deploy_app
+        - deploy_app
         #    requires: [create_cluster]
