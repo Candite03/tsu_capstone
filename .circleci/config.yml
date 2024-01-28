@@ -154,8 +154,9 @@ jobs:
              chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
       - aws-cli/install
-      - aws-eks/get-kubeconfig:
-          cluster-name: Capstone-EKS-Cluster
+      - run:
+          name: Get Kubeconfig
+          command: aws eks --region us-east-1" update-kubeconfig --name Capstone-EKS-Cluster
       - persist_to_workspace:
           root: .
           paths:
@@ -180,12 +181,11 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - checkout
       - attach_workspace:
           at: .
       - run:
-         name: Install dependencies
-         command: |
+          name: Install dependencies
+          command: |
             yum update && yum install -y \
               tar \
               gzip
