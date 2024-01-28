@@ -99,6 +99,12 @@ jobs:
     steps:
       - checkout
       - run:
+         name: Install dependencies
+         command: |
+            yum update && yum install -y \
+              tar \
+              gzip
+      - run:
           name: Get Instance IP
           command: | 
             INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=BastionHost" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
@@ -120,6 +126,11 @@ jobs:
       # attach workspace
       - attach_workspace:
           at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            apk add tar gzip
       - run:
           name: Configure BastionHost
           command: |
@@ -168,5 +179,5 @@ workflows:
              requires: [deploy_bastion_host, get_ip]
         #- create_cluster:
         #    requires: [create_vpc]
-        - deploy_app
-        #    requires: [create_cluster]
+        - deploy_app:
+            requires: [configure_bastion]
