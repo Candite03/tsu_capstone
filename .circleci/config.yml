@@ -4,11 +4,10 @@
 #
 version: 2.1
 
-executors:
-  self-hosted-runner-executor:
-    docker:
-      - image: amazon/aws-cli  # Specify the Docker image for this executor if needed
-    resource_class: small
+orbs:
+  aws-eks: circleci/aws-eks@1.1.0
+  aws-cli: circleci/aws-cli@2.0.0
+  kubernetes: circleci/kubernetes@0.4.0
 
 jobs:
   build:
@@ -144,10 +143,22 @@ jobs:
     steps:
       - checkout
       - run:
+         name: Install dependencies
+         command: |
+            yum update && yum install -y \
+              tar \
+              gzip
+      - run:
           name: Create K8s Cluster
           command: |
              chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
+      - aws-eks/get-kubeconfig:
+          cluster-name: Capstone-EKS-Cluster
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ~/.kube/config
 
   cluster_availability:
     docker:
@@ -169,11 +180,18 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
-          name: Deploy App
-          command: |
-             cd ./app_deploy
-             kubectl apply -f capstone.yml
+         name: Install dependencies
+         command: |
+            yum update && yum install -y \
+              tar \
+              gzip
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: Capstone-EKS-Cluster
+      - kubernetes/create-or-update-resource:
+          resource-file-path: ./app_deploy/capstone.yml
 
 workflows:
   eks-cluster-deploy:
