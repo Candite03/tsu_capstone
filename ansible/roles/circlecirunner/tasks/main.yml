@@ -1,7 +1,7 @@
 - name: "Install CircleCI Runner"
   become: true  
   shell:  |
-      yum install coreutils
+      yum install coreutils -y
       curl -s https://packagecloud.io/install/repositories/circleci/runner/script.rpm.sh?any=true | sudo bash
       sudo yum install circleci-runner -y
       export RUNNER_AUTH_TOKEN="d015ee0cadf1ca0acf49e2b7b4796dddf43608b514957943182eb8dd40776e7d4d89834e421edb8d"

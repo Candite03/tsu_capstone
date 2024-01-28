@@ -72,9 +72,9 @@ Resources:
           SubnetIds:
             - Fn::ImportValue: !Sub ${EnvironmentName}-PUB1-SN
             - Fn::ImportValue: !Sub ${EnvironmentName}-PUB2-SN
-          EndpointPublicAccess: false
-          EndpointPrivateAccess: true
-          PublicAccessCidrs: [ "1.1.1.2/32" ]
+          EndpointPublicAccess: true
+          EndpointPrivateAccess: false
+          PublicAccessCidrs: [ "0.0.0.0/0" ]
         Logging:
           ClusterLogging:
             EnabledTypes:

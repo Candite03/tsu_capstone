@@ -150,16 +150,16 @@ jobs:
              ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
 
   deploy_app:
-    machine: true
+    docker:
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
           name: Install dependencies
-          command: sudo apt-get update && sudo apt-get install -y jq
+          command: yum install -y jq
       - run:
           name: Check Cluster Availability
           command: |
-             echo "Hi I'm on Runners!"
              chmod +x ./cluster_availability.sh
              ./cluster_availability.sh
           no_output_timeout: 30m
@@ -167,17 +167,11 @@ jobs:
 workflows:
   eks-cluster-deploy:
     jobs:
-        #- build
-        #- build-docker:
-        #    requires: [build]
-        #- create_vpc
-        #- deploy_bastion_host
-        #     requires: [create_vpc]
-        - get_ip
-        #    requires: [deploy_bastion_host]
-        - configure_bastion:
-             requires: [get_ip]
-        #- create_cluster:
-        #    requires: [create_vpc]
+        - build
+        - build-docker:
+            requires: [build]
+        - create_vpc
+        - create_cluster:
+            requires: [create_vpc]
         - deploy_app:
-            requires: [configure_bastion]
+            requires: [create_cluster]
