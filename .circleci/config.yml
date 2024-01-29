@@ -215,4 +215,4 @@ workflows:
         - get_kubeconfig:
             requires: [cluster_availability]
         - deploy_app:
-            requires: [cluster_availability, create_cluster]
+            requires: [get_kubeconfig, cluster_availability, create_cluster]
