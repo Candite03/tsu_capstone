@@ -10,7 +10,7 @@ orbs:
   kubernetes: circleci/kubernetes@1.3.1
 
 jobs:
-  build:
+  build_code:
     docker:
     # Use the same Docker base as the project
       - image: python:3.7.3-stretch
@@ -48,7 +48,7 @@ jobs:
             . venv/bin/activate
             make lint
 
-  build-docker:
+  build_docker:
     docker:
       - image: circleci/node
     steps:
@@ -143,24 +143,11 @@ jobs:
     steps:
       - checkout
       - run:
-         name: Install dependencies
-         command: |
-            yum update && yum install -y \
-              tar \
-              gzip
-      - run:
           name: Create K8s Cluster
           command: |
              chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh Capstone-EKS-Cluster ./cloudformation/k8s_infra.yml ./cloudformation/infra-parameters.json
-      - aws-cli/install
-      - run:
-          name: Get Kubeconfig
-          command: aws eks --region us-east-1 update-kubeconfig --name Capstone-EKS-Cluster
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/
+      
 
   cluster_availability:
     docker:
@@ -176,6 +163,26 @@ jobs:
              chmod +x ./cluster_availability.sh
              ./cluster_availability.sh
           no_output_timeout: 30m
+  
+  get_kubeconfig:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+         name: Install dependencies
+         command: |
+            yum update && yum install -y \
+              tar \
+              gzip
+      - aws-cli/install
+      - run:
+          name: Get Kubeconfig
+          command: aws eks --region us-east-1 update-kubeconfig --name Capstone-EKS-Cluster
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/
     
   deploy_app:
     docker:
@@ -197,13 +204,15 @@ jobs:
 workflows:
   eks-cluster-deploy:
     jobs:
-        - build
-        - build-docker:
-            requires: [build]
+        - build_code
+        - build_docker:
+            requires: [build_code]
         - create_vpc
         - create_cluster:
             requires: [create_vpc]
         - cluster_availability:
             requires: [create_cluster]
+        - get_kubeconfig:
+            requires: [cluster_availability]
         - deploy_app:
             requires: [cluster_availability, create_cluster]
