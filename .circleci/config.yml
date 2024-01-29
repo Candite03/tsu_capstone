@@ -178,7 +178,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Get Kubeconfig
-          command: aws eks --region us-east-1 update-kubeconfig --name Capstone-EKS-Cluster
+          command: aws eks --region us-east-1 update-kubeconfig --name Capstone_Cluster
       - persist_to_workspace:
           root: ~/
           paths:
