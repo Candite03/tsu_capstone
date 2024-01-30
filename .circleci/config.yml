@@ -201,10 +201,21 @@ jobs:
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: Capstone_Cluster
           install-kubectl: true
+      
+      #- run:
+      #    name: Apply deployment and service
+      #    command: |
+      #      kubectl apply -f ./app_deploy/capstone.yml
+      #      kubectl apply -f ./app_deploy/capstone_service.yml
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: ./app_deploy/capstone.yml
-          #resource-name: capstone-project-app
+          resource-name: capstone-project-deployment
+
+      - kubernetes/create-or-update-resource: 
+          get-rollout-status: true
+          resource-file-path: ./app_deploy/capstone_service.yml  
+          resource-name: capstone-project-service
 
 workflows:
   eks-cluster-deploy:
