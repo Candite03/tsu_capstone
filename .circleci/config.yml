@@ -193,19 +193,18 @@ jobs:
          command: |
             yum update && yum install -y \
               tar \
-              gzip
+              gzip \
+              which \
+              unzip
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            yum update && yum install -y \
-              tar \
-              gzip
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: Capstone_Cluster
+          install-kubectl: true
       - kubernetes/create-or-update-resource:
+          get-rollout-status: true
           resource-file-path: ./app_deploy/capstone.yml
+          resource-name: capstone-project-app
 
 workflows:
   eks-cluster-deploy:
