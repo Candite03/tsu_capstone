@@ -204,7 +204,7 @@ jobs:
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: ./app_deploy/capstone.yml
-          resource-name: capstone-project-app
+          #resource-name: capstone-project-app
 
 workflows:
   eks-cluster-deploy:
