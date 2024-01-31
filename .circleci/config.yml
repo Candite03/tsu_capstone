@@ -76,7 +76,7 @@ jobs:
           name: Create K8s VPC
           command: |
              chmod +x ./cloudformation/scripts/create.sh
-             ./cloudformation/scripts/create.sh Capstone-EKS-VPC ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
+             ./cloudformation/scripts/update.sh Capstone-EKS-VPC ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
              sleep 300
              echo "VPC is now ready."
 
@@ -222,15 +222,16 @@ jobs:
 workflows:
   eks-cluster-deploy:
     jobs:
-        - build_code
-        - build_docker:
-            requires: [build_code]
+        #- build_code
+        #- build_docker:
+        #    requires: [build_code]
         - create_vpc
-        - create_cluster:
-            requires: [create_vpc]
-        - cluster_availability:
-            requires: [create_cluster]
-        - get_kubeconfig:
-            requires: [cluster_availability]
-        - deploy_app:
-            requires: [get_kubeconfig, cluster_availability, create_cluster]
+        - deploy_bastion_host
+        #- create_cluster:
+        #    requires: [create_vpc]
+        #- cluster_availability:
+         #   requires: [create_cluster]
+        #- get_kubeconfig:
+        #    requires: [cluster_availability]
+        #- deploy_app:
+         #   requires: [get_kubeconfig, cluster_availability, create_cluster]

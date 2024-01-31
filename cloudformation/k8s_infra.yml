@@ -53,7 +53,7 @@ Resources:
         SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
-          ToPort: 80
+          ToPort: 30080
           CidrIp: 0.0.0.0/0
         SecurityGroupEgress:
         - IpProtocol: -1
