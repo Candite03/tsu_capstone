@@ -91,51 +91,11 @@ jobs:
             chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh BastionHost ./cloudformation/bastion_host.yml ./cloudformation/infra-parameters.json
             sleep 40
-  
-  get_ip:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-         name: Install dependencies
-         command: |
-            yum update && yum install -y \
-              tar \
-              gzip
-      - run:
-          name: Get Instance IP
-          command: | 
-            INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=BastionHost" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
-            echo -e "$INSTANCE_IP" >> ansible/inventory.txt
 
       - persist_to_workspace:
           root: ~/
           paths:
             - project/ansible/inventory.txt
-
-  configure_bastion:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - add_ssh_keys:
-          # You can get this ID in the section where you registered the SSH Key
-            fingerprints: ["SHA256:01ODfG5OsCcf7ztYjM3cXz4WYkGBXeEM1g3j4P6Ti6k"]
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update ansible
-            apk add tar gzip
-      - run:
-          name: Configure BastionHost
-          command: |
-            cd ~/project/ansible
-            cat inventory.txt
-            ansible-playbook -i inventory.txt configure_runner.yml
-          
 
   create_cluster:
     docker:
@@ -205,11 +165,8 @@ jobs:
       - run:
           name: Apply deployment and service
           command: |
-            
-            kubectl get svc
-            kubectl get pods
-            kubectl get services -o wide
-
+            kubectl apply -f ./app_deploy/capstone.yml
+            kubectl apply -f ./app_deploy/capstone_service.yml
       #- kubernetes/create-or-update-resource:
       #    get-rollout-status: true
       #    action-type: create
@@ -225,16 +182,16 @@ jobs:
 workflows:
   capstone-project-deploy:
     jobs:
-        #- build_code
-        #- build_docker:
-        #    requires: [build_code]
-        #- create_vpc
+        - build_code
+        - build_docker:
+            requires: [build_code]
+        - create_vpc
         #- deploy_bastion_host
-        #- create_cluster:
-        #    requires: [create_vpc]
-        #- cluster_availability:
-        #    requires: [create_cluster]
-        - get_kubeconfig
-        #    requires: [cluster_availability]
+        - create_cluster:
+            requires: [create_vpc]
+        - cluster_availability:
+            requires: [create_cluster]
+        - get_kubeconfig:
+            requires: [cluster_availability]
         - deploy_app:
-            requires: [get_kubeconfig]
+            requires: [get_kubeconfig, cluster_availability, create_cluster]
