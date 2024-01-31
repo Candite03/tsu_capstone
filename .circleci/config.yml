@@ -202,22 +202,22 @@ jobs:
           cluster-name: Capstone_Cluster
           install-kubectl: true
       
-      #- run:
-      #    name: Apply deployment and service
-      #    command: |
-      #      kubectl apply -f ./app_deploy/capstone.yml
-      #      kubectl apply -f ./app_deploy/capstone_service.yml
-      - kubernetes/create-or-update-resource:
-          get-rollout-status: true
-          action-type: create
-          resource-file-path: ./app_deploy/capstone.yml
-          resource-name: capstone-project-deployment
+      - run:
+          name: Apply deployment and service
+          command: |
+            kubectl apply -f ./app_deploy/capstone.yml
+            kubectl apply -f ./app_deploy/capstone_service.yml
+      #- kubernetes/create-or-update-resource:
+      #    get-rollout-status: true
+      #    action-type: create
+          #resource-file-path: ./app_deploy/capstone.yml
+         # resource-name: capstone-project-deployment
 
-      - kubernetes/create-or-update-resource: 
-          get-rollout-status: true
-          action-type: create
-          resource-file-path: ./app_deploy/capstone_service.yml  
-          resource-name: capstone-project-service
+      #- kubernetes/create-or-update-resource: 
+      #    get-rollout-status: true
+      #    action-type: create
+      #    resource-file-path: ./app_deploy/capstone_service.yml  
+      #    resource-name: capstone-project-service
 
 workflows:
   eks-cluster-deploy:
