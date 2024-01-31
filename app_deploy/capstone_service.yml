@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: capstone-project-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: capstone-project-app
   ports:
-    - port: 8080
+    - protocol: TCP
+      port: 80
       targetPort: 80
