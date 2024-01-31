@@ -95,7 +95,7 @@ Resources:
           - Fn::ImportValue: !Sub ${EnvironmentName}-PUB2-SN
         ScalingConfig:
           DesiredSize: 2
-          MinSize: 1
+          MinSize: 2
           MaxSize: 5
         Tags:
           "Name": "tsu_EKSNodeGroup"

@@ -75,8 +75,8 @@ jobs:
       - run:
           name: Create K8s VPC
           command: |
-             chmod +x ./cloudformation/scripts/update.sh
-             ./cloudformation/scripts/update.sh Capstone-EKS-VPC ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
+             chmod +x ./cloudformation/scripts/create.sh
+             ./cloudformation/scripts/create.sh Capstone-EKS-VPC ./cloudformation/k8s_vpc.yml ./cloudformation/vpc-parameters.json
              sleep 300
              echo "VPC is now ready."
 
@@ -207,6 +207,9 @@ jobs:
           command: |
             kubectl apply -f ./app_deploy/capstone.yml
             kubectl apply -f ./app_deploy/capstone_service.yml
+            sleep 30
+            kubectl get deployment
+            kubectl get pods
       #- kubernetes/create-or-update-resource:
       #    get-rollout-status: true
       #    action-type: create
@@ -222,16 +225,16 @@ jobs:
 workflows:
   eks-cluster-deploy:
     jobs:
-        #- build_code
-        #- build_docker:
-        #    requires: [build_code]
+        - build_code
+        - build_docker:
+            requires: [build_code]
         - create_vpc
         #- deploy_bastion_host
-        #- create_cluster:
-        #    requires: [create_vpc]
-        #- cluster_availability:
-         #   requires: [create_cluster]
-        #- get_kubeconfig:
-        #    requires: [cluster_availability]
-        #- deploy_app:
-         #   requires: [get_kubeconfig, cluster_availability, create_cluster]
+        - create_cluster:
+            requires: [create_vpc]
+        - cluster_availability:
+            requires: [create_cluster]
+        - get_kubeconfig:
+            requires: [cluster_availability]
+        - deploy_app:
+            requires: [get_kubeconfig, cluster_availability, create_cluster]
