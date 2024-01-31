@@ -205,11 +205,11 @@ jobs:
       - run:
           name: Apply deployment and service
           command: |
-            kubectl apply -f ./app_deploy/capstone.yml
-            kubectl apply -f ./app_deploy/capstone_service.yml
-            sleep 30
-            kubectl get deployment
+            
+            kubectl get svc
             kubectl get pods
+            kubectl get services -o wide
+
       #- kubernetes/create-or-update-resource:
       #    get-rollout-status: true
       #    action-type: create
@@ -225,16 +225,16 @@ jobs:
 workflows:
   capstone-project-deploy:
     jobs:
-        - build_code
-        - build_docker:
-            requires: [build_code]
-        - create_vpc
+        #- build_code
+        #- build_docker:
+        #    requires: [build_code]
+        #- create_vpc
         #- deploy_bastion_host
-        - create_cluster:
-            requires: [create_vpc]
-        - cluster_availability:
-            requires: [create_cluster]
-        - get_kubeconfig:
-            requires: [cluster_availability]
+        #- create_cluster:
+        #    requires: [create_vpc]
+        #- cluster_availability:
+        #    requires: [create_cluster]
+        - get_kubeconfig
+        #    requires: [cluster_availability]
         - deploy_app:
-            requires: [get_kubeconfig, cluster_availability, create_cluster]
+            requires: [get_kubeconfig]
