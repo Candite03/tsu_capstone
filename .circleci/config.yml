@@ -204,22 +204,22 @@ jobs:
           name: Apply deployment and service
           command: |
             kubectl apply -f ./app_deploy/capstone.yml
-            kubectl apply -f ./app_deploy/capstone_service.yml
+            
 
 workflows:
   capstone-project-deploy:
     jobs:
-        - build_app
-        - build_docker:
-            requires: [build_app]
-        - create_vpc
-        - deploy_bastion_host:
-            requires:
-              - "create_vpc"
-        - create_cluster:
-            requires: [create_vpc]
-        - cluster_availability:
-            requires: [create_cluster]
+        #- build_app
+        #- build_docker:
+        #    requires: [build_app]
+        #- create_vpc
+        #- deploy_bastion_host:
+        #    requires:
+        #      - "create_vpc"
+        #- create_cluster:
+        #    requires: [create_vpc]
+        #- cluster_availability:
+         #   requires: [create_cluster]
         - get_kubeconfig:
             requires: [cluster_availability]
         - deploy_app:
