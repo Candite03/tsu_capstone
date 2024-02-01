@@ -204,6 +204,8 @@ jobs:
           name: Apply deployment and service
           command: |
             kubectl apply -f ./app_deploy/capstone.yml
+            kubectl get pods
+            kubectl get svc
             
 
 workflows:

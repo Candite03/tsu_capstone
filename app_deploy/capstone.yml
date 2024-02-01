@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: capstone-project-app
-          image: ninorainman/flaskapp:capstone-v2
+          image: ninorainman/flaskapp:capstone
           ports:
             - containerPort: 80
   strategy:
