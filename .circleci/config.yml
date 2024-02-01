@@ -223,13 +223,11 @@ workflows:
         #- build_code
         #- build_docker:
          #   requires: [build_code]
-        - create_vpc
-        - deploy_bastion_host:
-            requires:
-              - "create_vpc"
-        - get_ip: 
-            requires:
-              - "deploy_bastion_host"
+        #- create_vpc
+        #- deploy_bastion_host:
+        #    requires:
+        #      - "create_vpc"
+        - get_ip
         - configure_bastion:
             requires:
               - "get_ip"
