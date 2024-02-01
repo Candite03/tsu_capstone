@@ -19,3 +19,8 @@ spec:
           image: ninorainman/flaskapp:capstone
           ports:
             - containerPort: 80
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1

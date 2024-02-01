@@ -10,7 +10,7 @@ orbs:
   kubernetes: circleci/kubernetes@1.3.1
 
 jobs:
-  build_code:
+  build_app:
     docker:
     # Use the same Docker base as the project
       - image: python:3.7.3-stretch
@@ -64,8 +64,8 @@ jobs:
           name: Push docker image to DockerHub
           command: |
             docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
-            docker tag $DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME:capstone
-            docker push $DOCKER_IMAGE_NAME:capstone
+            docker tag $DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME:capstone-v2
+            docker push $DOCKER_IMAGE_NAME:capstone-v2
   
   create_vpc:
     docker:
@@ -205,37 +205,22 @@ jobs:
           command: |
             kubectl apply -f ./app_deploy/capstone.yml
             kubectl apply -f ./app_deploy/capstone_service.yml
-      #- kubernetes/create-or-update-resource:
-      #    get-rollout-status: true
-      #    action-type: create
-          #resource-file-path: ./app_deploy/capstone.yml
-         # resource-name: capstone-project-deployment
-
-      #- kubernetes/create-or-update-resource: 
-      #    get-rollout-status: true
-      #    action-type: create
-      #    resource-file-path: ./app_deploy/capstone_service.yml  
-      #    resource-name: capstone-project-service
 
 workflows:
   capstone-project-deploy:
     jobs:
-        #- build_code
-        #- build_docker:
-         #   requires: [build_code]
-        #- create_vpc
-        #- deploy_bastion_host:
-        #    requires:
-        #      - "create_vpc"
-        - get_ip
-        - configure_bastion:
+        - build_app
+        - build_docker:
+            requires: [build_app]
+        - create_vpc
+        - deploy_bastion_host:
             requires:
-              - "get_ip"
-       # - create_cluster:
-        #    requires: [create_vpc]
-        #- cluster_availability:
-         #   requires: [create_cluster]
-        #- get_kubeconfig
-        #    requires: [cluster_availability]
-        #- deploy_app:
-        #    requires: [get_kubeconfig]
+              - "create_vpc"
+        - create_cluster:
+            requires: [create_vpc]
+        - cluster_availability:
+            requires: [create_cluster]
+        - get_kubeconfig:
+            requires: [cluster_availability]
+        - deploy_app:
+            requires: [get_kubeconfig]
