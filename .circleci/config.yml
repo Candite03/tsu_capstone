@@ -91,11 +91,49 @@ jobs:
             chmod +x ./cloudformation/scripts/create.sh
              ./cloudformation/scripts/create.sh BastionHost ./cloudformation/bastion_host.yml ./cloudformation/infra-parameters.json
             sleep 40
-
+  get_ip:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+         name: Install dependencies
+         command: |
+            yum update && yum install -y \
+              tar \
+              gzip
+      - run:
+          name: Get Instance IP
+          command: | 
+            INSTANCE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=BastionHost" --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
+            echo -e "$INSTANCE_IP" >> ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/ansible/inventory.txt
+
+  configure_bastion:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          # You can get this ID in the section where you registered the SSH Key
+            fingerprints: 
+              - "SHA256:VB6wHP3dKz9Xlc2HShSCJe8uq4PGFw59iegiOQXm3FY"
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            apk add tar gzip
+      - run:
+          name: Configure BastionHost
+          command: |
+            cd ~/project/ansible
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure_bastion.yml
 
   create_cluster:
     docker:
@@ -185,8 +223,16 @@ workflows:
         #- build_code
         #- build_docker:
          #   requires: [build_code]
-       # - create_vpc
-        #- deploy_bastion_host
+        - create_vpc
+        - deploy_bastion_host:
+            requires:
+              - "create_vpc"
+        - get_ip: 
+            requires:
+              - "deploy_bastion_host"
+        - configure_bastion:
+            requires:
+              - "get_ip"
        # - create_cluster:
         #    requires: [create_vpc]
         #- cluster_availability:
