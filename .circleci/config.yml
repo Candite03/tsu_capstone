@@ -220,7 +220,7 @@ workflows:
         #    requires: [create_vpc]
         #- cluster_availability:
          #   requires: [create_cluster]
-        - get_kubeconfig:
-            requires: [cluster_availability]
+        - get_kubeconfig
+         #   requires: [cluster_availability]
         - deploy_app:
             requires: [get_kubeconfig]
