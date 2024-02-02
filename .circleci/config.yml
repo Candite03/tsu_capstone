@@ -209,20 +209,20 @@ jobs:
 workflows:
   capstone-project-deploy:
     jobs:
-        - build_app
-        - build_docker:
-            requires: [build_app]
-        - create_vpc:
-            requires:
-              - "build_app"
-        - deploy_bastion_host:
-            requires:
-              - "create_vpc"
-        - create_cluster:
-            requires: [create_vpc]
-        - cluster_availability:
-            requires: [create_cluster]
-        - get_kubeconfig:
-            requires: [cluster_availability]
+        #- build_app
+        #- build_docker:
+        #    requires: [build_app]
+        #- create_vpc:
+        #    requires:
+        #      - "build_app"
+        #- deploy_bastion_host:
+        #    requires:
+        #      - "create_vpc"
+        #- create_cluster:
+        #    requires: [create_vpc]
+        #- cluster_availability:
+        #    requires: [create_cluster]
+        - get_kubeconfig
+        #    requires: [cluster_availability]
         - deploy_app:
             requires: [get_kubeconfig]
